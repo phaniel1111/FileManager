@@ -13,8 +13,8 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
-    <Filter Include="totp">
-      <UniqueIdentifier>{cdc23498-3b08-40c7-aaa0-ea43455d5d89}</UniqueIdentifier>
+    <Filter Include="Totp">
+      <UniqueIdentifier>{7273b5f8-6fe3-4b9d-841b-82eb90254b8b}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -30,28 +30,31 @@
     <ClCompile Include="File.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="totp\libcppotp\bytes.cpp">
-      <Filter>totp</Filter>
+    <ClCompile Include="totp\bytes.cpp">
+      <Filter>Totp</Filter>
     </ClCompile>
-    <ClCompile Include="totp\libcppotp\otp.cpp">
-      <Filter>totp</Filter>
+    <ClCompile Include="totp\otp.cpp">
+      <Filter>Totp</Filter>
     </ClCompile>
-    <ClCompile Include="totp\libcppotp\sha1.cpp">
-      <Filter>totp</Filter>
+    <ClCompile Include="totp\sha1.cpp">
+      <Filter>Totp</Filter>
+    </ClCompile>
+    <ClCompile Include="Totp.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="resource.h">
+    <ClInclude Include="totp\bytes.h">
+      <Filter>Totp</Filter>
+    </ClInclude>
+    <ClInclude Include="totp\otp.h">
+      <Filter>Totp</Filter>
+    </ClInclude>
+    <ClInclude Include="totp\sha1.h">
+      <Filter>Totp</Filter>
+    </ClInclude>
+    <ClInclude Include="Totp.h">
       <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="totp\libcppotp\bytes.h">
-      <Filter>totp</Filter>
-    </ClInclude>
-    <ClInclude Include="totp\libcppotp\otp.h">
-      <Filter>totp</Filter>
-    </ClInclude>
-    <ClInclude Include="totp\libcppotp\sha1.h">
-      <Filter>totp</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

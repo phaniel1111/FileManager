@@ -4,6 +4,7 @@
 class FileHeader {
     char createDate[8];
     char modifyDate[8];
+    char totp[16];
     unsigned int studentCount;
     unsigned int teacherCount;
     unsigned int studentStartByte;
