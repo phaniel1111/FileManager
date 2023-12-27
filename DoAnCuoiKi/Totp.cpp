@@ -58,9 +58,9 @@ std::string generateRandomBase32String(size_t size) {
 /* Example
 int main()
 {
-	string key = "JBSWY3DPEHPK3PXP";
 	string code;
-
+	string key = generateRandomBase32String(16);
+	cout << key << endl;
 	do {
 		cout << "Input code: ";
 		cin >> code;
@@ -71,3 +71,35 @@ int main()
 }
 
 */
+
+bool authentication(std::string key) {
+
+	std::string code;
+
+	int t = 3;
+	int index = 10;
+	int timelock = index;
+
+	do {
+		std::cout << "Input code: ";
+		std::cin >> code;
+		if (isValidTOTP(key, code)) break;
+
+		t -= 1;
+		std::cout << "Wrong " << 3 - t << " time(s)." << std::endl;
+		if (t == 0) {
+			while (timelock)
+			{
+				printf("Please try again in %2ld seconds \r", timelock -=1);
+				fflush(stdout);
+				Sleep(1000);
+			}
+			t = 3;
+			index *= 2;
+			timelock = index;
+			system("cls");
+		}
+	} while (1);
+	std::cout << "Authenticated!";
+	return true;
+};

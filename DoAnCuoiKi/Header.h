@@ -1,6 +1,8 @@
-#include <iostream>
-#include <fstream>
-#include <vector>
-#include <cassert>
+#pragma once
 
-using namespace std;
+#include <cassert>
+#include "Totp.h"
+#include "File.h"
+#include "utils.h"
+
+

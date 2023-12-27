@@ -42,6 +42,9 @@
     <ClCompile Include="Totp.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="utils.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="totp\bytes.h">
@@ -54,6 +57,9 @@
       <Filter>Totp</Filter>
     </ClInclude>
     <ClInclude Include="Totp.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="utils.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
