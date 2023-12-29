@@ -65,7 +65,7 @@ public:
     void printPersons();
     void deletePerson();
     void modifyPerson();
-    bool modifyTOTPKey();
+    void modifyTOTPKey();
 
     
 private:

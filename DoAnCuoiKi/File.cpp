@@ -404,13 +404,13 @@ void FileManager::modifyPerson() {
 		cout << "Modify failed" << endl;
 }
 
-bool FileManager::modifyTOTPKey() {
+void FileManager::modifyTOTPKey() {
 
     string path = (this->filedir == "\\") ? this->filename + ".ds" : this->filedir + this->filename + ".ds";
     fstream file(path, ios::in | ios::out | ios::binary);  // Use 'path' instead of 'filename'
     if (!file.is_open()) {
         cout << "Can't open file" << endl;
-        return false;
+        return;
     }
     string key = generateRandomBase32String(16);
     memset(header.totp, 0, sizeof(header.totp)); // Initialize the array with zeros
@@ -420,6 +420,4 @@ bool FileManager::modifyTOTPKey() {
     file.seekp(0, std::ios::beg);
     file.write(reinterpret_cast<char*>(&this->header), sizeof(this->header));
     file.close();
-
-    return true;
 }

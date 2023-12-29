@@ -42,7 +42,6 @@ int main()
         cout << "3. Delete student/teacher from the list" << endl;
         cout << "4. Modify student/teacher from the list" << endl;
         cout << "5. Modify TOTP key" << endl;
-		
         cout << "6. Exit" << endl;  // Assuming option 3 is for exiting the loop
 
 		cout << "Enter your choice: ";
