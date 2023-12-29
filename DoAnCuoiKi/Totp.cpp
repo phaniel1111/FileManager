@@ -103,3 +103,4 @@ bool authentication(std::string key) {
 	std::cout << "Authenticated!";
 	return true;
 };
+

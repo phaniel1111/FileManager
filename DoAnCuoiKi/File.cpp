@@ -22,9 +22,9 @@ bool FileManager::openFile()
     }
 
     processFilePath(path, filedir, filename);
-    cout << "File name: " << filename << endl;
-    cout << "File directory: " << filedir << endl;
-    system("pause");
+    //cout << "File name: " << filename << endl;
+    //cout << "File directory: " << filedir << endl;
+    //system("pause");
     //cout << "File name: " << filename << endl;
     //cout << "File directory: " << filedir << endl;
     file.read(reinterpret_cast<char*>(&header), sizeof(FileHeader));
@@ -220,7 +220,7 @@ void FileManager::addPerson() {
     std::string number = "0123456789";
     std::string idNumber = "083202005555";*/
 
-    string id, name, birthday, joinDate, status, number, idNumber;
+    string id, name, birthday, joinDate, status = "AT", number, idNumber, password;
     cout << "Input id: ";
     cin >> id;
     cout << "Input name: ";
@@ -229,11 +229,15 @@ void FileManager::addPerson() {
     cin >> birthday;
     cout << "Input join date: ";
     cin >> joinDate;
-    cout << "Input number: ";
+    cout << "Input phone number: ";
     cin >> number;
     cout << "Input id number: ";
     cin >> idNumber;
-    status = "AT";
+    cout << "Input password to encrypt phone and id number: ";
+    cin >> password;
+    
+    number = xorStrings(password, number);
+    idNumber = xorStrings(password, idNumber);
 
     // Call _createPerson with example data
     Person ps = _createPerson(id, name, birthday, joinDate, status, number, idNumber);
@@ -251,7 +255,7 @@ void FileManager::addPerson() {
         int pos = byteArrayToUint32(header.teacherStartByte) + (byteArrayToUint32(header.teacherCount) * 80);
         _writePerson(ps, pos);
         if(_writePerson(ps, pos) && _modifyCounterInHeader(type))
-            cout << "Steacher added" << endl;
+            cout << "Teacher added" << endl;
         //cout << "pos" << pos << endl;
 
     }
@@ -294,6 +298,7 @@ void FileManager::printPersons() {
         auto& ps = pp[i];
         if (ps.status[0] == 'A')
         {
+
             cout << "Index: " << i + 1 << endl;  // Adding the index
             cout << "ID: " << byteArrayToString(ps.id, 8) << endl;
             cout << "Name: " << byteArrayToString(ps.name, 30) << endl;
@@ -378,18 +383,33 @@ void FileManager::modifyPerson() {
 	cin >> joinDate;
     cout << "Input status: ";
     cin >> status;
-	cout << "Input number: ";
-	cin >> number;
-	cout << "Input id number: ";
-	cin >> idNumber;
 
     if(id != "")  memset(&ps.id, 0, sizeof(Person));
     if(name != "")  memset(&ps.name, 0, sizeof(Person));
     if(birthday != "")  memset(&ps.birthday, 0, sizeof(Person));
     if(joinDate != "")  memset(&ps.joinDate, 0, sizeof(Person));
     if(status != "")  memset(&ps.status, 0, sizeof(Person));
-    if(number != "")  memset(&ps.number, 0, sizeof(Person));
-    if(idNumber != "")  memset(&ps.idNumber, 0, sizeof(Person));
+
+    int t = 0;
+    cout << "Input 1 if you want to change encrypted phone and id number. If not, input 0: ";
+    cin >> t;
+    if (t == 1)
+    {
+        cout << "Input phone number: ";
+        cin >> number;
+        cout << "Input id number: ";
+        cin >> idNumber;
+
+        string password;
+        cout << "Input new password: ";
+        cin >> password;
+
+        number = xorStrings(password, number);
+        idNumber = xorStrings(password, idNumber);
+
+        memset(&ps.number, 0, sizeof(Person));
+        memset(&ps.idNumber, 0, sizeof(Person));
+    }
 
     memcpy(ps.id, id.c_str(), id.size());
     memcpy(ps.name, name.c_str(), name.size());
@@ -420,4 +440,83 @@ void FileManager::modifyTOTPKey() {
     file.seekp(0, std::ios::beg);
     file.write(reinterpret_cast<char*>(&this->header), sizeof(this->header));
     file.close();
+}
+
+void FileManager::viewPrivateData() {
+    int pos;
+    int posByte;
+    bool type;
+
+    cout << "Input type (0: teacher , 1: student): ";
+    cin >> type;
+
+    int count = (type ? byteArrayToUint32(header.studentCount) : byteArrayToUint32(header.teacherCount));
+    do {
+        cout << "Input index position: ";
+        cin >> pos;
+
+        if (pos < 1 || pos > count) {
+            cout << "Input should in range." << endl;
+        }
+
+    } while (pos < 1 || pos > count);
+
+    pos--;
+    if (type)
+        posByte = byteArrayToUint32(header.studentStartByte) + 80 * pos;
+    else
+        posByte = byteArrayToUint32(header.teacherStartByte) + 80 * pos;
+
+    Person ps = _readPerson(posByte);
+    
+    string password;
+    cout << "Input password to decrypt phone and id number: ";
+    cin >> password;
+
+    string number = xorStrings(password, byteArrayToString(ps.number, 10));
+    string idNumber = xorStrings(password, byteArrayToString(ps.idNumber, 12));
+
+    cout << "Index: " << pos << endl;  // Adding the index
+    cout << "ID: " << byteArrayToString(ps.id, 8) << endl;
+    cout << "Name: " << byteArrayToString(ps.name, 30) << endl;
+    cout << "Birthday: " << byteArrayToString(ps.birthday, 8) << endl;
+    cout << "Join Date: " << byteArrayToString(ps.joinDate, 8) << endl;
+    cout << "Status: " << byteArrayToString(ps.status, 2) << endl;
+    cout << "Number: " << number << endl;
+    cout << "ID Number: " << idNumber << endl;
+    cout << endl;
+}
+
+void FileManager::restorePerson() {
+    int pos;
+    int posByte;
+    bool type;
+
+    cout << "Input type (0: teacher , 1: student): ";
+    cin >> type;
+
+    int count = (type ? byteArrayToUint32(header.studentCount) : byteArrayToUint32(header.teacherCount));
+    do {
+        cout << "Input index position: ";
+        cin >> pos;
+
+        if (pos < 1 || pos > count) {
+            cout << "Input should in range." << endl;
+        }
+
+    } while (pos < 1 || pos > count);
+
+    pos--;
+    if (type)
+        posByte = byteArrayToUint32(header.studentStartByte) + 80 * pos;
+    else
+        posByte = byteArrayToUint32(header.teacherStartByte) + 80 * pos;
+
+    Person ps = _readPerson(posByte);
+    ps.status[0] = 'A';
+    ps.status[1] = 'T';
+    if (_writePerson(ps, posByte))
+        cout << "Restore successfully" << endl;
+    else
+        cout << "Restore failed" << endl;
 }

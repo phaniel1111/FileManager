@@ -13,7 +13,6 @@
  
 #include "utils.h"
 #include "Totp.h"
-#include "md5.h"
 
 typedef unsigned char BYTE;
 using namespace std;
@@ -52,7 +51,7 @@ public:
     bool createFile();
 
     bool _createHeader(FileHeader& header);
-    bool _modifyCounterInHeader(bool type); //type 0 teacher 1 student
+    bool _modifyCounterInHeader(bool type); //type: 0 teacher 1 student
     void printHeader(FileHeader header);
 
     Person _createPerson(string& id,string& name,string& birthday,string& joinDate,string& status,string& number,string& idNumber);
@@ -61,12 +60,13 @@ public:
     bool _writePerson(Person& ps, int pos);
     
     // Second menu: add/ delete/ modify/ print person
-    void addPerson(); //type 0 teacher 1 student
-    void printPersons();
-    void deletePerson();
-    void modifyPerson();
-    void modifyTOTPKey();
-
+    void addPerson(); //type: 0 teacher 1 student
+    void printPersons(); // Print list of students/ teachers
+    void deletePerson(); // Delete a  student/ teacher
+    void modifyPerson(); // Modify a student/ teacher
+    void modifyTOTPKey(); // Modify TOTP key
+    void viewPrivateData(); // View private data of a student/ teacher using password that user had set
+    void restorePerson(); //  Restore a deleted student/ teacher by their index in the file, not by their ID.
     
 private:
     vector<Person> students;

@@ -12,6 +12,6 @@ void processFilePath(const string& filePath, string& fileDir, string& fileName);
 string byteArrayToString(const unsigned char* array, size_t size);
 uint32_t byteArrayToUint32(const unsigned char* array);
 time_t byteArrayToTimeT(const unsigned char* array);
-
+string xorStrings(const std::string& str1, const std::string& str2);
 
 #endif

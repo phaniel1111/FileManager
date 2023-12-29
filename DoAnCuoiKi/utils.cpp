@@ -50,3 +50,30 @@ time_t byteArrayToTimeT(const unsigned char* date) {
     }
     return restoredTime;
 }
+
+string xorStrings(const std::string& str1, const std::string& str2) {
+    std::string result;
+
+    // Adjust the lengths of the strings if they are not equal
+    std::string adjustedStr1 = str1;
+    std::string adjustedStr2 = str2;
+
+    if (str1.length() < str2.length()) {
+        // Duplicate str1 to match the length of str2
+        while (adjustedStr1.length() < str2.length()) {
+            adjustedStr1 += str1;
+        }
+        adjustedStr1 = adjustedStr1.substr(0, str2.length());
+    }
+    else if (str1.length() > str2.length()) {
+        // Take a substring of str1 to match the length of str2
+        adjustedStr1 = str1.substr(0, str2.length());
+    }
+
+    // Perform XOR on each pair of characters
+    for (std::size_t i = 0; i < adjustedStr1.length(); ++i) {
+        result += static_cast<char>(adjustedStr1[i] ^ adjustedStr2[i]);
+    }
+
+    return result;
+}
