@@ -1,6 +1,16 @@
 // Cau tao file:
 // 1. File header: 48 bytes
-
+// 2 teacher list = 1/ 10 size of student list (input when create file)
+// 3. Student list: user input
+// person size = 80 bytes
+// Delete item is just change status to "DL" not remove permanently
+// counting variables is always go up, not go down when delete item
+// Restore item is just change status to "AC"
+// all input for searching is use by index (then calculate to bytes = index * 80) in file, not by other attributes
+// idnex is shown when print student/teacher list. 
+// Items which are deleted will not be shown, and index will not be changed, it may show 1->2->4 (3 was deleted)
+// used TOTP for file security, time limit is 10s for 3 wrong password, time limit * 2 each 3 times wrong password
+// used XOR for phone and id number with password, password is set by user. if forgot password, can't view private data
 
 #ifndef FILE_H  
 #define FILE_H
