@@ -52,7 +52,8 @@ public:
 
     bool _createHeader(FileHeader& header);
     bool _modifyCounterInHeader(bool type); //type: 0 teacher 1 student
-    void printHeader(FileHeader header);
+    bool _modifyDateHeader();
+    void printHeader();
 
     Person _createPerson(string& id,string& name,string& birthday,string& joinDate,string& status,string& number,string& idNumber);
     Person _readPerson(int pos);

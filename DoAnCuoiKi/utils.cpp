@@ -45,7 +45,8 @@ uint32_t byteArrayToUint32(const unsigned char* array) {
 // Function to convert byte array to time_t
 time_t byteArrayToTimeT(const unsigned char* date) {
     time_t restoredTime = 0;
-    for (int i = 0; i < 10; ++i) {
+    size_t length = sizeof(date) / sizeof(date[0]);
+    for (int i = 0; i < 4; ++i) {
         restoredTime |= static_cast<time_t>(date[i]) << (i * 8);
     }
     return restoredTime;
