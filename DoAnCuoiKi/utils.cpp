@@ -10,7 +10,7 @@ void processFilePath(const string& filePath, string& fileDir, string& fileName) 
 
     // Extract the directory
     fileDir = (lastSeparator != std::string::npos) ? filePath.substr(0, lastSeparator) : "";
-
+    fileDir += "\\";
     // Extract the filename
     size_t lastDot = filePath.find_last_of('.');
     if (lastSeparator != std::string::npos && lastDot != std::string::npos && lastDot > lastSeparator) {
@@ -19,6 +19,10 @@ void processFilePath(const string& filePath, string& fileDir, string& fileName) 
     else {
         // If there's no dot after the last separator, or if the dot is before the separator, use the entire filename
         fileName = (lastSeparator != std::string::npos) ? filePath.substr(lastSeparator + 1) : filePath;
+    }
+    if (endWith(fileName, ".ds"))
+    {
+        fileName = fileName.substr(0, fileName.size() - 3);
     }
 }
 

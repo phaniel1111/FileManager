@@ -1,4 +1,8 @@
-#ifndef FILE_H  // Add include guards to prevent multiple inclusion
+// Cau tao file:
+// 1. File header: 48 bytes
+
+
+#ifndef FILE_H  
 #define FILE_H
 
 #include <string>
@@ -7,23 +11,25 @@
 #include <vector>
 #include <chrono>
  
-#include "utils.h"1
+#include "utils.h"
 #include "Totp.h"
+#include "md5.h"
 
 typedef unsigned char BYTE;
 using namespace std;
 
-//size 56 bytes
+//size 48 bytes
 class FileHeader {
 public:
     BYTE identifier[4];
-    BYTE createDate[10];
-    BYTE modifyDate[10];
+    BYTE createDate[4];
+    BYTE modifyDate[4];
     BYTE totp[16];
     BYTE studentCount[4];
     BYTE teacherCount[4];
     BYTE studentStartByte[4];
     BYTE teacherStartByte[4];
+    BYTE unsed[4];
 };
 // each person size 80 bytes
 class Person {
@@ -38,34 +44,35 @@ public:
 };
 
 
-class Teacher : Person {};
-class Student : Person {};
-
 class FileManager {
 public:
     FileHeader header;
+    // First menu: open/ create file
+    bool openFile();
+    bool createFile();
 
-    bool OpenFile();
-    bool CreateFile();
-
-    bool _createFileHeader(FileHeader& header);
+    bool _createHeader(FileHeader& header);
+    bool _modifyCounterInHeader(bool type); //type 0 teacher 1 student
     void printHeader(FileHeader header);
 
-    Person createPerson(
-        string& id,
-        string& name,
-        string& birthday,
-        string& joinDate,
-        string& status,
-        string& number,
-        string& idNumber);
+    Person _createPerson(string& id,string& name,string& birthday,string& joinDate,string& status,string& number,string& idNumber);
+    Person _readPerson(int pos);
+    void _readPersons(bool type, int from, int to);
+    bool _writePerson(Person& ps, int pos);
+    
+    // Second menu: add/ delete/ modify/ print person
+    void addPerson(); //type 0 teacher 1 student
+    void printPersons();
+    void deletePerson();
+    void modifyPerson();
+    bool modifyTOTPKey();
 
-    //Person readPersons(int pos, int number);
+    
 private:
-    vector<Student> students;
-    vector<Teacher> teachers;
-    string filename;
-    string filedir;
+    vector<Person> students;
+    vector<Person> teachers;
+    string filename = "";
+    string filedir = "";
     string extension = "ds";
 };
 #endif 
