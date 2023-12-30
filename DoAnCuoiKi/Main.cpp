@@ -1,4 +1,4 @@
-#include "Header.h"
+﻿#include "Header.h"
 
 int main()
 {
@@ -6,7 +6,7 @@ int main()
 	
     int choice;
     bool t;
-
+    
     do {
         cout << "1. Open file" << endl;
         cout << "2. Create file" << endl;

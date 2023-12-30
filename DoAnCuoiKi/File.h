@@ -20,7 +20,7 @@
 #include <fstream>
 #include <vector>
 #include <chrono>
- 
+
 #include "utils.h"
 #include "Totp.h"
 

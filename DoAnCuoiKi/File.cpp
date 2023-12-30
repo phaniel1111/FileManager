@@ -1,4 +1,4 @@
-#include "File.h" 
+﻿#include "File.h" 
 #define _CRT_SECURE_NO_WARNINGS
 
 // First menu: Open file
@@ -64,7 +64,7 @@ bool FileManager::_createHeader(FileHeader& header) {
     header.identifier[0] = BYTE('D');
     header.identifier[1] = BYTE('S');
 
-    auto currentTimePoint = std::chrono::system_clock::now();
+    auto currentTimePoint = chrono::system_clock::now();
     time_t currentTime = chrono::system_clock::to_time_t(currentTimePoint);
     for (int i = 0; i < 8; ++i) {
         header.createDate[i] = static_cast<BYTE>((currentTime >> (i * 8)) & 0xFF);
@@ -78,9 +78,9 @@ bool FileManager::_createHeader(FileHeader& header) {
 
     uint32_t teacherStart = 48;
     int count = 1000;
-    cout << "Please input the estimated number of students (ex. 1000): ";
+    cout << "Please input the estimated number of teacher (ex. 100): ";
     cin >> count;
-    uint32_t studentStart = (count / 10) * 80 + 48;
+    uint32_t studentStart = count * 80 + 48;
 
     memcpy(header.teacherStartByte, &teacherStart, sizeof(teacherStart));
     memcpy(header.studentStartByte, &studentStart, sizeof(studentStart));
@@ -88,7 +88,8 @@ bool FileManager::_createHeader(FileHeader& header) {
     string key = generateRandomBase32String(16);
     memset(header.totp, 0, sizeof(header.totp)); // Initialize the array with zeros
     memcpy(header.totp, key.c_str(), key.size());
-    std::cout << "Please write down your TOTP key: " << byteArrayToString(header.totp, 16) << std::endl;
+    cout << "Please write down your TOTP key: " << byteArrayToString(header.totp, 16) << endl;
+
     return true;
 }
 bool FileManager::_modifyCounterInHeader(bool type) {
@@ -122,12 +123,12 @@ bool FileManager::_modifyDateHeader() {
         cout << "Can't open file" << endl;
         return false;
     }
-    auto currentTimePoint = std::chrono::system_clock::now();
+    auto currentTimePoint = chrono::system_clock::now();
     time_t currentTime = chrono::system_clock::to_time_t(currentTimePoint);
     for (int i = 0; i < 4; ++i) {
         this->header.modifyDate[i] = static_cast<BYTE>((currentTime >> (i * 8)) & 0xFF);
     }
-    file.seekp(0, std::ios::beg);
+    file.seekp(0, ios::beg);
     file.write(reinterpret_cast<char*>(&this->header), sizeof(this->header));
 
     file.close();
@@ -143,14 +144,14 @@ void FileManager::printHeader() {
     char timeBuffer2[26];
     ctime_s(timeBuffer1, sizeof(timeBuffer1), &t1);
     ctime_s(timeBuffer2, sizeof(timeBuffer2), &t2);
-    std::cout << "Identifier: " << byteArrayToString(header.identifier, 4) << std::endl;
-    std::cout << "Create Date: " << timeBuffer1 << endl;
-    std::cout << "Modify Date: " << timeBuffer2 << endl;
-    std::cout << "TOTP: " << byteArrayToString(header.totp, 16) << std::endl;
-    std::cout << "Student Count: " << byteArrayToUint32(header.studentCount) << std::endl;
-    std::cout << "Teacher Count: " << byteArrayToUint32(header.teacherCount) << std::endl;
-    std::cout << "Student Start Byte: " << byteArrayToUint32(header.studentStartByte) << std::endl;
-    std::cout << "Teacher Start Byte: " << byteArrayToUint32(header.teacherStartByte) << std::endl;
+    cout << "Identifier: " << byteArrayToString(header.identifier, 4) << endl;
+    cout << "Create Date: " << timeBuffer1 << endl;
+    cout << "Modify Date: " << timeBuffer2 << endl;
+    cout << "TOTP: " << byteArrayToString(header.totp, 16) << endl;
+    cout << "Student Count: " << byteArrayToUint32(header.studentCount) << endl;
+    cout << "Teacher Count: " << byteArrayToUint32(header.teacherCount) << endl;
+    cout << "Student Start Byte: " << byteArrayToUint32(header.studentStartByte) << endl;
+    cout << "Teacher Start Byte: " << byteArrayToUint32(header.teacherStartByte) << endl;
 }
 
 Person FileManager::_createPerson(string& id,string& name,string& birthday,string& joinDate,string& status,string& number,string& idNumber) {
@@ -183,7 +184,7 @@ Person FileManager::_readPerson(int pos) {
         return ps;
     }
 
-    file.seekg(pos, std::ios::beg);
+    file.seekg(pos, ios::beg);
     file.read(reinterpret_cast<char*>(&ps), sizeof(ps));
 
     return ps;
@@ -222,7 +223,7 @@ bool FileManager::_writePerson(Person& ps, int pos) {
 		return false;
 	}
 
-	file.seekp(pos, std::ios::beg);
+	file.seekp(pos, ios::beg);
 	file.write(reinterpret_cast<char*>(&ps), sizeof(ps));
     _modifyDateHeader();
     return true;
@@ -235,13 +236,13 @@ void FileManager::addPerson() {
     cout << "Input type (0: teacher , 1: student): ";
     cin >> type;
 
-    /*std::string id = "12345678";
-    std::string name = "John Doe";
-    std::string birthday = "19900101";
-    std::string joinDate = "20220101";
-    std::string status = "AT";
-    std::string number = "0123456789";
-    std::string idNumber = "083202005555";*/
+    /*string id = "12345678";
+    string name = "John Doe";
+    string birthday = "19900101";
+    string joinDate = "20220101";
+    string status = "AT";
+    string number = "0123456789";
+    string idNumber = "083202005555";*/
 
     string id, name, birthday, joinDate, status = "AT", number, idNumber, password;
     cout << "Input id: ";
@@ -307,7 +308,7 @@ void FileManager::printPersons() {
 
     } while (to < 1 || to > count);
 
-    cout << (type ? "Student List" : "Teacher List") << std::endl;
+    cout << (type ? "Student List" : "Teacher List") << endl;
 
 	_readPersons(type, from - 1, to - 1);
     vector<Person> pp;
@@ -457,9 +458,9 @@ void FileManager::modifyTOTPKey() {
     string key = generateRandomBase32String(16);
     memset(header.totp, 0, sizeof(header.totp)); // Initialize the array with zeros
     memcpy(header.totp, key.c_str(), key.size());
-    std::cout << "Please write down your new TOTP key: " << byteArrayToString(header.totp, 16) << std::endl;
+    cout << "Please write down your new TOTP key: " << byteArrayToString(header.totp, 16) << endl;
 
-    file.seekp(0, std::ios::beg);
+    file.seekp(0, ios::beg);
     file.write(reinterpret_cast<char*>(&this->header), sizeof(this->header));
     _modifyDateHeader();
 
