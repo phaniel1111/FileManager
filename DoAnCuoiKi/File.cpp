@@ -27,7 +27,7 @@ bool FileManager::openFile()
     //TESTING
     //printHeader(this->header);
     // Authentication
-    //authentication(byteArrayToString(header.totp, 16));
+    authentication(byteArrayToString(header.totp, 16));
 
     // read teacher/student
 
